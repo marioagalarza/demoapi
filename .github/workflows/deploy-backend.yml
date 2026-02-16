@@ -3,7 +3,7 @@ name: Deploy Backend to Cloud Run
 on:
   push:
     branches:
-      - main  # Se dispara al subir cambios a la rama principal
+      - master  # Se dispara al subir cambios a la rama principal
 
 env:
   PROJECT_ID: demoapi-mario  # <--- REEMPLAZÁ ESTO CON TU ID REAL
