@@ -1,0 +1,49 @@
+spring:
+  # 1. Configuración de Base de Datos (H2 en Memoria)
+  datasource:
+    url: jdbc:h2:mem:mgalarza_db;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  output:
+      ansi:
+        enabled: ALWAYS
+  # 2. Consola H2 para que entres desde el navegador
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        trace: false
+        web-allow-others: false
+
+  # 3. Configuración de JPA / Hibernate
+  jpa:
+    show-sql: true          # Ver las queries en la consola de IntelliJ
+    generate-ddl: true      # Crear tablas automáticamente
+    hibernate:
+      ddl-auto: create-drop # Limpia la DB cada vez que reinicias (ideal para pruebas limpias)
+    properties:
+      hibernate:
+        format_sql: true    # Formatea el SQL para que sea legible
+        dialect: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+# 4. Logs detallados para desarrollo
+logging:
+  level:
+    root: INFO
+    ar.com.mercadolibre: DEBUG      # Cambia 'com.mgalarza' por tu paquete base para ver tus logs
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE # Para ver los parámetros que envías a la DB
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - [TraceID: %X{traceId:-}, SpanID: %X{spanId:-}] - %msg%n"
+
+  # 5. Deshabilitar caché para ver cambios en caliente (si usas Thymeleaf o similares)
+  thymeleaf:
+    cache: false
+
+  management:
+    tracing:
+      sampling:
+        probability:1.0
+      enabled: true

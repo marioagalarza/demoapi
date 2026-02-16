@@ -1,0 +1,43 @@
+spring:
+  # 1. Base de Datos Real (PostgreSQL)
+  datasource:
+    url: jdbc:h2:mem:mgalarza_db;DB_CLOSE_DELAY=-1
+    #url: jdbc:postgresql://${DB_HOST:localhost}:5432/${DB_NAME:mgalarza_prod}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 20      # Optimización de conexiones para producción
+      minimum-idle: 5
+      idle-timeout: 300000
+
+  # 2. Seguridad: Deshabilitar Consola H2
+  h2:
+    console:
+      enabled: false # ❌ Terminantemente prohibido en PROD
+
+  # 3. JPA / Hibernate (Máxima Precaución)
+  jpa:
+    show-sql: false             # No queremos saturar los logs
+    hibernate:
+      ddl-auto: update   #solo para que funcione en mi local
+      #ddl-auto: validate        # SOLO valida. No crea ni modifica tablas (usa migraciones) - ENTORNO PRODUCTIVO
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc.batch_size: 25     # Optimización para inserts masivos
+    defer-datasource-initialization: true
+
+# 4. Logs: Nivel restrictivo
+logging:
+  level:
+    root: WARN                  # Solo errores y advertencias
+    com.mgalarza: INFO          # Info básica de tu negocio
+    org.springframework: WARN
+
+# 5. Configuración de Servidor (Seguridad)
+server:
+  port: 8080
+  forward-headers-strategy: native # Necesario si usas Nginx o Balanceadores en la nube
+  error:
+    include-message: never      # No dar pistas a atacantes sobre errores internos
+    include-stacktrace: never

@@ -1,0 +1,38 @@
+spring:
+  # 1. Base de Datos Persistente (H2 en archivo)
+  # Esto crea un archivo en la carpeta /data de tu proyecto para que no se pierdan los datos
+  datasource:
+    url: jdbc:h2:mem:mgalarza_db;DB_CLOSE_DELAY=-1
+    #url: jdbc:h2:file:./data/uat_db;DB_CLOSE_ON_EXIT=FALSE;
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  # 2. Consola H2 (Habilitada para soporte técnico)
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  # 3. JPA / Hibernate (Modo validación)
+  jpa:
+    show-sql: false         # No llenamos el log de SQL en UAT
+    hibernate:
+      ddl-auto: update      # Mantiene los datos y solo aplica cambios si agregas columnas
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+
+# 4. Logs Nivel INFO
+# Queremos ver qué pasa, pero no el detalle extremo de debug
+logging:
+  level:
+    root: INFO
+    com.mgalarza: INFO
+    org.springframework.web: INFO
+
+# 5. Configuración de archivos (Ejemplo para las imágenes de noticias)
+# En UAT podrías usar una ruta local diferente a la de desarrollo
+app:
+  upload-dir: ./uploads/uat/

@@ -1,0 +1,24 @@
+spring:
+  # 1. Identidad de la aplicación
+  application:
+    name: mgalarza-api-service
+
+  # 2. Selección del perfil (Usa la variable de Maven @activatedProperties@ que configuramos)
+  profiles:
+    active: "@activatedProperties@"
+
+  # 3. Configuración común de Jackson para tus JSON del carrito
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    default-property-inclusion: non_null
+
+server:
+  port: 8080 # Puerto por defecto para todos los ambientes
+  error:
+    include-message: always # Útil para ver errores en tu frontend de GitHub Pages
+
+# 4. Configuraciones personalizadas de tu lógica de negocio
+app:
+  version: 1.0.0
+  description: API de noticias y carrito para mgalarza.com
